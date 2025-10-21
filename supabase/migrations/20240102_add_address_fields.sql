@@ -1,0 +1,11 @@
+ALTER TABLE public.events
+ADD COLUMN IF NOT EXISTS place_id TEXT,
+ADD COLUMN IF NOT EXISTS place_name TEXT,
+ADD COLUMN IF NOT EXISTS formatted_address TEXT,
+ADD COLUMN IF NOT EXISTS lat DOUBLE PRECISION,
+ADD COLUMN IF NOT EXISTS lng DOUBLE PRECISION,
+ADD COLUMN IF NOT EXISTS city TEXT,
+ADD COLUMN IF NOT EXISTS country_code TEXT;
+
+CREATE INDEX IF NOT EXISTS idx_events_place_id ON public.events(place_id);
+CREATE INDEX IF NOT EXISTS idx_events_location_coords ON public.events(lat, lng);
