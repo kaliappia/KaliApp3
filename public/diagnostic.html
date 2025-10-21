@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic - JavaScript Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #1f2937;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .status {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .check-item {
+            padding: 8px 0;
+            font-family: monospace;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .success {
+            color: #10b981;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .info {
+            background: #dbeafe;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 14px;
+            color: #1e40af;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        #debug-info {
+            background: #1f2937;
+            color: #d1d5db;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Diagnostic JavaScript</h1>
+
+        <div class="status">
+            <div class="check-item success">✅ HTML chargé</div>
+            <div class="check-item success">✅ CSS appliqué</div>
+            <div class="check-item" id="js-check">⏳ JavaScript en cours...</div>
+            <div class="check-item" id="dom-check">⏳ DOM en cours...</div>
+            <div class="check-item" id="es6-check">⏳ ES6 en cours...</div>
+            <div class="check-item" id="fetch-check">⏳ Fetch API en cours...</div>
+        </div>
+
+        <div class="info">
+            <strong>Temps de chargement:</strong> <span id="load-time">Calcul...</span>
+        </div>
+
+        <div id="debug-info"></div>
+
+        <div>
+            <a href="/" class="btn">← App Principale</a>
+            <a href="/setup.html" class="btn">📋 Configuration</a>
+            <a href="/test.html" class="btn">🧪 Test HTML</a>
+        </div>
+    </div>
+
+    <script>
+        const startTime = performance.now();
+        const debugInfo = [];
+
+        function log(message) {
+            debugInfo.push(`[${new Date().toISOString()}] ${message}`);
+            document.getElementById('debug-info').textContent = debugInfo.join('\n');
+        }
+
+        function updateCheck(id, success, message) {
+            const el = document.getElementById(id);
+            if (success) {
+                el.className = 'check-item success';
+                el.textContent = `✅ ${message}`;
+            } else {
+                el.className = 'check-item error';
+                el.textContent = `❌ ${message}`;
+            }
+        }
+
+        try {
+            // Test 1: JavaScript fonctionne
+            log('JavaScript execution started');
+            updateCheck('js-check', true, 'JavaScript fonctionne');
+
+            // Test 2: DOM manipulation
+            log('Testing DOM manipulation');
+            const testDiv = document.createElement('div');
+            updateCheck('dom-check', true, 'DOM manipulation OK');
+
+            // Test 3: ES6 features
+            log('Testing ES6 features');
+            const arrow = () => 'test';
+            const template = `Template literal: ${arrow()}`;
+            const { pathname } = window.location;
+            updateCheck('es6-check', true, 'ES6 features OK');
+            log(`ES6 test result: ${template}`);
+
+            // Test 4: Fetch API
+            log('Testing Fetch API');
+            if (window.fetch) {
+                updateCheck('fetch-check', true, 'Fetch API disponible');
+            } else {
+                updateCheck('fetch-check', false, 'Fetch API non disponible');
+            }
+
+            // Informations système
+            log('=== SYSTEM INFO ===');
+            log(`User Agent: ${navigator.userAgent}`);
+            log(`Platform: ${navigator.platform}`);
+            log(`Language: ${navigator.language}`);
+            log(`URL: ${window.location.href}`);
+            log(`Screen: ${window.screen.width}x${window.screen.height}`);
+            log(`Viewport: ${window.innerWidth}x${window.innerHeight}`);
+            log(`Online: ${navigator.onLine}`);
+
+            // Vérifier localStorage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                log('localStorage: OK');
+            } catch (e) {
+                log(`localStorage: ERROR - ${e.message}`);
+            }
+
+            // Vérifier si c'est iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isIOSPWA = window.navigator.standalone;
+            log(`iOS Device: ${isIOS}`);
+            log(`iOS PWA Mode: ${isIOSPWA}`);
+
+            // Temps de chargement
+            window.addEventListener('load', () => {
+                const loadTime = (performance.now() - startTime).toFixed(2);
+                document.getElementById('load-time').textContent = `${loadTime}ms`;
+                log(`Page load time: ${loadTime}ms`);
+
+                // Performance metrics
+                if (window.performance && window.performance.timing) {
+                    const perf = window.performance.timing;
+                    const pageLoadTime = perf.loadEventEnd - perf.navigationStart;
+                    const connectTime = perf.responseEnd - perf.requestStart;
+                    const renderTime = perf.domComplete - perf.domLoading;
+
+                    log(`=== PERFORMANCE ===`);
+                    log(`Total Load: ${pageLoadTime}ms`);
+                    log(`Server Response: ${connectTime}ms`);
+                    log(`DOM Render: ${renderTime}ms`);
+                }
+            });
+
+        } catch (error) {
+            log(`CRITICAL ERROR: ${error.message}`);
+            log(`Stack: ${error.stack}`);
+            document.body.style.background = '#dc2626';
+        }
+    </script>
+</body>
+</html>
