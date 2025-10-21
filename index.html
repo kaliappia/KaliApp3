@@ -23,23 +23,22 @@
     <title>DSocial Calendar</title>
   </head>
   <body>
-    <div id="root"></div>
-
-    <!-- Debug Script - Capture errors before React loads -->
-    <script>
-      // Show loading indicator
-      const root = document.getElementById('root');
-      root.innerHTML = `
-        <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: sans-serif;">
-          <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 600px; text-align: center;">
-            <h1 style="margin: 0 0 20px 0; color: #1f2937;">⏳ Chargement...</h1>
-            <p style="color: #6b7280; margin: 0;">L'application se charge</p>
-            <div id="debug-info" style="margin-top: 20px; text-align: left; background: #f3f4f6; padding: 15px; border-radius: 8px; font-size: 12px; font-family: monospace;"></div>
-          </div>
+    <div id="root">
+      <!-- Loading screen - will be replaced by React when ready -->
+      <div id="loading-screen" style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); font-family: sans-serif; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999;">
+        <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 600px; width: 90%; text-align: center;">
+          <h1 style="margin: 0 0 20px 0; color: #1f2937;">⏳ Chargement...</h1>
+          <p style="color: #6b7280; margin: 0 0 20px 0;">L'application se charge</p>
+          <div id="debug-info" style="text-align: left; background: #f3f4f6; padding: 15px; border-radius: 8px; font-size: 12px; font-family: monospace; max-height: 300px; overflow-y: auto;"></div>
         </div>
-      `;
+      </div>
+    </div>
 
+    <!-- Debug Script - Capture errors and keep loading screen visible -->
+    <script>
       const debugInfo = document.getElementById('debug-info');
+      const loadingScreen = document.getElementById('loading-screen');
+      let appLoaded = false;
 
       function log(message, isError = false) {
         const p = document.createElement('p');
@@ -47,56 +46,103 @@
         p.style.color = isError ? '#dc2626' : '#059669';
         p.textContent = (isError ? '❌ ' : '✓ ') + message;
         debugInfo.appendChild(p);
+        debugInfo.scrollTop = debugInfo.scrollHeight;
+        console.log(message);
+      }
+
+      function showError(title, details) {
+        if (loadingScreen) {
+          loadingScreen.innerHTML = `
+            <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #dc2626; font-family: monospace; color: white; padding: 20px; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; overflow-y: auto;">
+              <div style="background: #1f2937; padding: 30px; border-radius: 15px; max-width: 800px; width: 90%;">
+                <h1 style="color: #fca5a5; margin-top: 0;">❌ ${title}</h1>
+                ${details}
+                <div style="margin-top: 20px;">
+                  <button onclick="location.href='/test.html'" style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-right: 10px;">🧪 Page de Test</button>
+                  <button onclick="location.reload()" style="background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">🔄 Rafraîchir</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }
       }
 
       log('HTML chargé');
       log('Root element trouvé');
+      log('Écran de chargement affiché');
 
-      // Capture all errors
+      // Capture all errors - including module errors
       window.addEventListener('error', function(event) {
-        log('ERREUR: ' + event.message, true);
-        log('Fichier: ' + event.filename, true);
-        log('Ligne: ' + event.lineno, true);
+        log('ERREUR CAPTURÉE: ' + event.message, true);
 
-        root.innerHTML = `
-          <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #dc2626; font-family: monospace; color: white; padding: 20px;">
-            <div style="background: #1f2937; padding: 30px; border-radius: 15px; max-width: 800px; width: 100%;">
-              <h1 style="color: #fca5a5; margin-top: 0;">❌ Erreur JavaScript</h1>
-              <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; overflow: auto;">
-                <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Message:</p>
-                <pre style="margin: 0; white-space: pre-wrap; color: #fca5a5;">${event.message}</pre>
-              </div>
-              <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Fichier:</p>
-                <pre style="margin: 0; white-space: pre-wrap; color: #d1d5db;">${event.filename}</pre>
-              </div>
-              <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Ligne:</p>
-                <pre style="margin: 0; white-space: pre-wrap; color: #d1d5db;">${event.lineno}:${event.colno}</pre>
-              </div>
-              ${event.error && event.error.stack ? `
-                <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; overflow: auto;">
-                  <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Stack:</p>
-                  <pre style="margin: 0; white-space: pre-wrap; font-size: 11px; color: #d1d5db;">${event.error.stack}</pre>
-                </div>
-              ` : ''}
-              <button onclick="location.href='/test.html'" style="background: #10b981; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; margin-right: 10px;">🧪 Page de Test</button>
-              <button onclick="location.reload()" style="background: #6366f1; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">🔄 Rafraîchir</button>
-            </div>
+        const details = `
+          <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; overflow: auto;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Message:</p>
+            <pre style="margin: 0; white-space: pre-wrap; color: #fca5a5; font-size: 13px;">${event.message || 'Erreur inconnue'}</pre>
           </div>
+          <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Fichier:</p>
+            <pre style="margin: 0; white-space: pre-wrap; color: #d1d5db; font-size: 12px;">${event.filename || 'Non spécifié'}</pre>
+          </div>
+          <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Position:</p>
+            <pre style="margin: 0; white-space: pre-wrap; color: #d1d5db;">Ligne ${event.lineno || '?'}, Colonne ${event.colno || '?'}</pre>
+          </div>
+          ${event.error && event.error.stack ? `
+            <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; overflow: auto;">
+              <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Stack Trace:</p>
+              <pre style="margin: 0; white-space: pre-wrap; font-size: 11px; color: #d1d5db;">${event.error.stack}</pre>
+            </div>
+          ` : ''}
         `;
+
+        showError('Erreur JavaScript Détectée', details);
+        event.preventDefault();
         return false;
-      });
+      }, true); // Use capture phase
 
       window.addEventListener('unhandledrejection', function(event) {
         log('ERREUR PROMISE: ' + event.reason, true);
+
+        const details = `
+          <div style="background: #374151; padding: 15px; border-radius: 8px; margin-bottom: 15px; overflow: auto;">
+            <p style="margin: 0 0 10px 0; font-weight: bold; color: #fbbf24;">Promise Rejetée:</p>
+            <pre style="margin: 0; white-space: pre-wrap; color: #fca5a5; font-size: 13px;">${event.reason}</pre>
+          </div>
+        `;
+
+        showError('Erreur de Promise Non Gérée', details);
+        event.preventDefault();
       });
 
-      log('Listeners d\'erreur installés');
-      log('Chargement de main.tsx...');
+      log('Listeners d\'erreur installés (mode capture)');
+
+      // Keep loading screen for at least 2 seconds to see what happens
+      setTimeout(() => {
+        log('Timeout 2s atteint');
+        if (!appLoaded) {
+          log('⚠️ App pas encore chargée après 2s', true);
+        }
+      }, 2000);
+
+      // Detect when React takes over
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            log('Changement DOM détecté');
+          }
+        });
+      });
+
+      observer.observe(document.getElementById('root'), {
+        childList: true,
+        subtree: true
+      });
+
+      log('Observer DOM installé');
+      log('Démarrage du chargement de main.tsx...');
     </script>
 
     <script type="module" src="/src/main.tsx"></script>
-    <!-- <script src="https://api.tempo.build/proxy-asset?url=https://storage.googleapis.com/tempo-public-assets/error-handling.js"></script> [deprecated] -->
   </body>
 </html>
