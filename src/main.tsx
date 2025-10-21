@@ -8,6 +8,7 @@ import { EventProvider } from "./contexts/EventContext";
 import { OrganizerProvider } from "./contexts/OrganizerContext";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./i18n/config";
+import { SupabaseCheck } from "./components/SupabaseCheck";
 
 const rootElement = document.getElementById("root");
 
@@ -17,16 +18,18 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <I18nextProvider i18n={i18n}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <AuthProvider>
-          <EventProvider>
-            <OrganizerProvider>
-              <App />
-            </OrganizerProvider>
-          </EventProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </I18nextProvider>
+    <SupabaseCheck>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <AuthProvider>
+            <EventProvider>
+              <OrganizerProvider>
+                <App />
+              </OrganizerProvider>
+            </EventProvider>
+          </AuthProvider>
+        </BrowserRouter>
+      </I18nextProvider>
+    </SupabaseCheck>
   </React.StrictMode>,
 );
