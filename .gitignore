@@ -32,3 +32,6 @@ core
 
 .github/
 
+# Capacitor dev config (contient l'IP locale)
+capacitor.config.dev.local.ts
+
