@@ -4,12 +4,20 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc ; vite build",
     "build-no-errors": "tsc ; vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "types:supabase": "npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/types/supabase.ts"
+    "types:supabase": "npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > src/types/supabase.ts",
+    "ios:build": "npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:sync": "npx cap sync ios",
+    "ios:deploy": "npm run build && npx cap sync ios && npx cap open ios",
+    "ios:dev-setup": "bash scripts/setup-dev-server.sh",
+    "ios:dev-sync": "npx cap sync ios --config capacitor.config.dev.local.ts",
+    "ios:dev-open": "npx cap open ios",
+    "ios:dev": "npm run ios:dev-setup && echo '\n✅ Configuration créée! Maintenant:\n1. Démarrez le serveur: npm run dev\n2. Synchronisez avec iOS: npm run ios:dev-sync\n3. Ouvrez Xcode: npm run ios:dev-open'"
   },
   "dependencies": {
     "@capacitor/app": "^7.1.0",
