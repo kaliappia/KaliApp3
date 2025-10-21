@@ -1,7 +1,4 @@
 import { isSupabaseConfigured } from '@/lib/supabase';
-import { AlertCircle, ExternalLink } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
 
 export function SupabaseCheck({ children }: { children: React.ReactNode }) {
   if (isSupabaseConfigured) {
@@ -9,94 +6,158 @@ export function SupabaseCheck({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-2xl w-full space-y-6">
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold text-gray-900">DSocial Calendar</h1>
-          <p className="text-gray-600">Application sociale de gestion d'événements</p>
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+    }}>
+      <div style={{
+        maxWidth: '600px',
+        width: '100%',
+        background: 'white',
+        borderRadius: '20px',
+        padding: '40px',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.3)'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <h1 style={{
+            fontSize: '32px',
+            fontWeight: 'bold',
+            color: '#1f2937',
+            margin: '0 0 10px 0'
+          }}>
+            DSocial Calendar
+          </h1>
+          <p style={{ color: '#6b7280', margin: 0 }}>
+            Application sociale de gestion d'événements
+          </p>
         </div>
 
-        <Alert className="bg-white border-orange-200">
-          <AlertCircle className="h-5 w-5 text-orange-600" />
-          <AlertTitle className="text-lg font-semibold text-gray-900">
-            Configuration Supabase Requise
-          </AlertTitle>
-          <AlertDescription className="mt-3 space-y-4 text-gray-700">
-            <p>
-              L'application nécessite une connexion à Supabase pour fonctionner.
-              Les variables d'environnement ne sont pas configurées.
+        <div style={{
+          background: '#fff3cd',
+          border: '2px solid #ffc107',
+          borderRadius: '10px',
+          padding: '20px',
+          marginBottom: '20px'
+        }}>
+          <h2 style={{
+            fontSize: '20px',
+            fontWeight: 'bold',
+            color: '#856404',
+            margin: '0 0 15px 0'
+          }}>
+            ⚠️ Configuration Supabase Requise
+          </h2>
+
+          <p style={{ color: '#856404', marginBottom: '15px' }}>
+            L'application nécessite une connexion à Supabase pour fonctionner.
+            Les variables d'environnement ne sont pas configurées.
+          </p>
+
+          <div style={{
+            background: '#f8f9fa',
+            padding: '15px',
+            borderRadius: '8px',
+            marginBottom: '15px'
+          }}>
+            <p style={{ fontWeight: 'bold', marginBottom: '10px', color: '#1f2937' }}>
+              Sur Vercel, ajoutez ces variables :
             </p>
-
-            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-              <p className="font-semibold mb-2">Sur Vercel, ajoutez ces variables :</p>
-              <div className="space-y-2 font-mono text-sm">
-                <div className="bg-white p-2 rounded border">
-                  <span className="text-blue-600">VITE_SUPABASE_URL</span>
-                  <span className="text-gray-400 ml-2">= votre_url_supabase</span>
-                </div>
-                <div className="bg-white p-2 rounded border">
-                  <span className="text-blue-600">VITE_SUPABASE_ANON_KEY</span>
-                  <span className="text-gray-400 ml-2">= votre_cle_supabase</span>
-                </div>
-              </div>
+            <div style={{
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              background: 'white',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #dee2e6',
+              marginBottom: '8px'
+            }}>
+              <span style={{ color: '#0066cc' }}>VITE_SUPABASE_URL</span>
+              <span style={{ color: '#6c757d' }}> = votre_url_supabase</span>
             </div>
-
-            <div className="space-y-3">
-              <p className="font-semibold">Étapes à suivre :</p>
-              <ol className="list-decimal list-inside space-y-2 text-sm">
-                <li>
-                  Créez un projet sur{' '}
-                  <a
-                    href="https://supabase.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline inline-flex items-center gap-1"
-                  >
-                    supabase.com
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </li>
-                <li>Allez dans Settings &gt; API de votre projet Supabase</li>
-                <li>Copiez l'URL et la clé anon public</li>
-                <li>
-                  Sur Vercel : Project Settings &gt; Environment Variables
-                </li>
-                <li>Ajoutez les deux variables ci-dessus</li>
-                <li>Redéployez votre application depuis l'onglet Deployments</li>
-              </ol>
+            <div style={{
+              fontFamily: 'monospace',
+              fontSize: '14px',
+              background: 'white',
+              padding: '10px',
+              borderRadius: '5px',
+              border: '1px solid #dee2e6'
+            }}>
+              <span style={{ color: '#0066cc' }}>VITE_SUPABASE_ANON_KEY</span>
+              <span style={{ color: '#6c757d' }}> = votre_cle_supabase</span>
             </div>
+          </div>
 
-            <div className="flex gap-3 pt-2">
-              <Button asChild variant="default">
-                <a
-                  href="https://supabase.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2"
-                >
-                  Créer un Projet Supabase
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </Button>
+          <div style={{ marginBottom: '15px' }}>
+            <p style={{ fontWeight: 'bold', color: '#1f2937', marginBottom: '10px' }}>
+              Étapes à suivre :
+            </p>
+            <ol style={{
+              paddingLeft: '20px',
+              color: '#495057',
+              fontSize: '14px',
+              lineHeight: '1.6'
+            }}>
+              <li>Créez un projet sur <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" style={{ color: '#0066cc' }}>supabase.com</a></li>
+              <li>Allez dans Settings &gt; API de votre projet Supabase</li>
+              <li>Copiez l'URL et la clé anon public</li>
+              <li>Sur Vercel : Project Settings &gt; Environment Variables</li>
+              <li>Ajoutez les deux variables ci-dessus</li>
+              <li>Redéployez votre application depuis l'onglet Deployments</li>
+            </ol>
+          </div>
 
-              <Button asChild variant="outline">
-                <a
-                  href="https://vercel.com/dashboard"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2"
-                >
-                  Configurer sur Vercel
-                  <ExternalLink className="h-4 w-4" />
-                </a>
-              </Button>
-            </div>
-          </AlertDescription>
-        </Alert>
-
-        <div className="text-center text-sm text-gray-500">
-          <p>Une fois configuré, rafraîchissez cette page</p>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            <a
+              href="https://supabase.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                background: '#667eea',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}
+            >
+              Créer un Projet Supabase →
+            </a>
+            <a
+              href="https://vercel.com/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'inline-block',
+                background: 'white',
+                color: '#667eea',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: 'bold',
+                fontSize: '14px',
+                border: '2px solid #667eea'
+              }}
+            >
+              Configurer sur Vercel →
+            </a>
+          </div>
         </div>
+
+        <p style={{
+          textAlign: 'center',
+          color: '#6b7280',
+          fontSize: '14px',
+          margin: 0
+        }}>
+          Une fois configuré, rafraîchissez cette page
+        </p>
       </div>
     </div>
   );
