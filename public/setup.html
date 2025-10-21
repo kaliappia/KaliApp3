@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DSocial Calendar - Setup</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 { color: #1f2937; margin-bottom: 10px; font-size: 28px; }
+        p { color: #6b7280; margin-bottom: 20px; }
+        .alert {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .alert h2 { color: #856404; font-size: 20px; margin-bottom: 15px; }
+        .alert p { color: #856404; }
+        .code-box {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .var { color: #0066cc; font-weight: bold; }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .btn:hover { background: #5568d3; }
+        .btn-outline {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        ol { padding-left: 20px; margin: 15px 0; }
+        li { margin: 8px 0; color: #4b5563; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 DSocial Calendar</h1>
+        <p>Application sociale de gestion d'événements</p>
+
+        <div class="alert">
+            <h2>⚠️ Configuration Requise</h2>
+            <p>Pour utiliser l'application, vous devez configurer Supabase.</p>
+
+            <div class="code-box">
+                <p style="margin-bottom: 10px;"><strong>Variables à ajouter sur Vercel :</strong></p>
+                <div><span class="var">VITE_SUPABASE_URL</span> = votre_url_supabase</div>
+                <div><span class="var">VITE_SUPABASE_ANON_KEY</span> = votre_cle_supabase</div>
+            </div>
+
+            <p><strong>Étapes :</strong></p>
+            <ol>
+                <li>Créez un projet sur <a href="https://supabase.com" target="_blank" style="color: #0066cc;">supabase.com</a></li>
+                <li>Allez dans Settings → API</li>
+                <li>Copiez l'URL et la clé anon</li>
+                <li>Sur Vercel : Settings → Environment Variables</li>
+                <li>Ajoutez les 2 variables ci-dessus</li>
+                <li>Redéployez l'application</li>
+            </ol>
+
+            <div style="margin-top: 20px;">
+                <a href="https://supabase.com" target="_blank" class="btn">Créer Projet Supabase</a>
+                <a href="https://vercel.com/dashboard" target="_blank" class="btn btn-outline">Ouvrir Vercel</a>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: #9ca3af; font-size: 14px;">
+            Une fois configuré, rafraîchissez cette page
+        </p>
+    </div>
+</body>
+</html>
