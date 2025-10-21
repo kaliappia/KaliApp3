@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - DSocial Calendar</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            text-align: center;
+        }
+        h1 {
+            color: #667eea;
+            margin: 0 0 20px 0;
+        }
+        .status {
+            background: #10b981;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✅ Vercel Fonctionne !</h1>
+
+        <div class="status">
+            Le déploiement Vercel est OK
+        </div>
+
+        <div class="info">
+            <h3>Informations :</h3>
+            <p><strong>App :</strong> DSocial Calendar</p>
+            <p><strong>Status :</strong> Déploiement réussi</p>
+            <p><strong>Problème :</strong> L'app principale crash probablement à cause de Supabase</p>
+        </div>
+
+        <div class="info">
+            <h3>Prochaines étapes :</h3>
+            <ol style="text-align: left; padding-left: 20px;">
+                <li>Configure Supabase sur <a href="https://supabase.com" target="_blank">supabase.com</a></li>
+                <li>Ajoute les variables d'environnement sur Vercel</li>
+                <li>Redéploie l'application</li>
+            </ol>
+        </div>
+
+        <button onclick="window.location.href='/'">
+            Retourner à l'App Principale
+        </button>
+
+        <button onclick="window.open('https://supabase.com', '_blank')">
+            Créer Projet Supabase
+        </button>
+    </div>
+</body>
+</html>
