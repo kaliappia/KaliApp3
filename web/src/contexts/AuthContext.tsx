@@ -100,6 +100,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signUp = async (username: string, email: string, password: string) => {
+    console.log('[AUTH] Starting sign up for:', email);
+
+    // Check if username already exists
+    const { data: existingProfile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('username', username)
+      .maybeSingle();
+
+    if (existingProfile) {
+      throw new Error('Username already taken');
+    }
+
     // Create user with email and password
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -107,14 +120,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       options: {
         data: {
           username
-        }
+        },
+        emailRedirectTo: window.location.origin
       }
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('[AUTH] Sign up error:', error);
+      throw new Error(error.message || 'Failed to create account');
+    }
+
+    if (!data.user) {
+      throw new Error('No user returned from sign up');
+    }
+
+    console.log('[AUTH] User created:', data.user.id);
+    console.log('[AUTH] Email confirmation required?', !data.session);
 
     // Create profile immediately
-    if (data.user) {
+    try {
       const { error: profileError } = await supabase
         .from('profiles')
         .insert({
@@ -126,8 +150,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           is_admin: false
         });
 
-      if (profileError) throw profileError;
-      await loadProfile(data.user.id);
+      if (profileError) {
+        console.error('[AUTH] Profile creation error:', profileError);
+        throw new Error('Failed to create profile: ' + profileError.message);
+      }
+
+      console.log('[AUTH] Profile created successfully');
+
+      // Only load profile if user is confirmed (no email confirmation required)
+      if (data.session) {
+        await loadProfile(data.user.id);
+        console.log('[AUTH] User signed in automatically');
+      } else {
+        console.log('[AUTH] Email confirmation required - user must confirm email before signing in');
+        // Clear any existing session
+        setUser(null);
+        setProfile(null);
+        setSession(null);
+        throw new Error('Please check your email to confirm your account before signing in');
+      }
+    } catch (profileError: any) {
+      // If profile creation fails, log the error but don't try to delete user
+      // (we can't use admin API from client side)
+      console.error('[AUTH] Profile creation failed:', profileError);
+      throw profileError;
     }
   };
 

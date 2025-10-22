@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function SignUpPage() {
   const navigate = useNavigate();
@@ -14,6 +14,7 @@ export default function SignUpPage() {
   const { toast } = useToast();
 
   const [loading, setLoading] = useState(false);
+  const [emailConfirmation, setEmailConfirmation] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -68,28 +69,84 @@ export default function SignUpPage() {
       await signUp(username, email, password);
       
       toast({
-        title: 'Account Created',
-        description: 'Welcome to Social Calendar!',
+        title: 'Account Created! 🎉',
+        description: 'Welcome to DSocial Calendar!',
       });
       
       navigate('/');
     } catch (error: any) {
-      toast({
-        title: 'Sign Up Failed',
-        description: error.message,
-        variant: 'destructive'
-      });
+      console.error('[SIGNUP] Error:', error);
+      
+      // Check if it's an email confirmation message
+      if (error.message?.includes('confirm your account') || error.message?.includes('check your email')) {
+        setEmailConfirmation(true);
+        toast({
+          title: 'Check Your Email 📧',
+          description: error.message,
+        });
+      } else {
+        toast({
+          title: 'Sign Up Failed',
+          description: error.message || 'Failed to create account. Please try again.',
+          variant: 'destructive'
+        });
+      }
     } finally {
       setLoading(false);
     }
   };
+
+  // Email confirmation success view
+  if (emailConfirmation) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <div className="flex items-center gap-2 mb-2">
+              <CheckCircle2 className="h-6 w-6 text-green-500" />
+              <CardTitle>Check Your Email</CardTitle>
+            </div>
+            <CardDescription>One more step to get started!</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm text-blue-900">
+                We've sent a confirmation email to <strong>{email}</strong>
+              </p>
+              <p className="text-sm text-blue-900 mt-2">
+                Please click the link in the email to confirm your account, then come back to sign in.
+              </p>
+            </div>
+
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <p className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <span>Check your spam folder if you don't see the email</span>
+              </p>
+              <p className="flex items-start gap-2">
+                <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <span>The link will expire in 24 hours</span>
+              </p>
+            </div>
+
+            <Button 
+              className="w-full" 
+              onClick={() => navigate('/login')}
+            >
+              Go to Sign In
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Create Account</CardTitle>
-          <CardDescription>Join Social Calendar to start sharing events</CardDescription>
+          <CardDescription>Join DSocial Calendar to start sharing events</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
