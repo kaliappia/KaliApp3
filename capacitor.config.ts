@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.dsocial.calendar',
   appName: 'DSocial Calendar',
-  webDir: 'dist',
+  webDir: 'web/dist',
   server: {
     androidScheme: 'https',
     iosScheme: 'https'

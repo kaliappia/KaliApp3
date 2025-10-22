@@ -10,7 +10,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.dsocial.calendar',
   appName: 'DSocial Calendar (Dev)',
-  webDir: 'dist',
+  webDir: 'web/dist',
   server: {
     // Remplacer par votre IP locale (ex: 192.168.1.100)
     url: 'http://YOUR_LOCAL_IP:5173',

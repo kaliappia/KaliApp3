@@ -1,201 +1,214 @@
-# DSocial Calendar
+# 📱 DSocial Calendar
 
-Application sociale de gestion d'événements construite avec React, TypeScript, Vite, et Capacitor pour iOS.
+Application sociale de gestion d'événements - Version Web + iOS
 
-## 🚀 Technologies
+## 📂 Structure du Projet
 
-- **Frontend:** React 18 + TypeScript
-- **Build Tool:** Vite 6
-- **UI:** Tailwind CSS + Shadcn/ui
-- **Backend:** Supabase
-- **Mobile:** Capacitor (iOS)
-- **i18n:** Support multilingue (EN, FR, ES, DE, IT, JA)
-
-## 📱 Développement iOS
-
-Cette application est optimisée pour iOS avec deux workflows de développement :
-
-### Option 1 : Live Reload (Développement Rapide)
-
-Développez avec rechargement automatique sur votre iPhone réel !
-
-```bash
-# Configuration initiale (une seule fois)
-npm run ios:dev-setup
-
-# Démarrer le serveur de dev
-npm run dev
-
-# Dans un autre terminal : synchroniser avec iOS
-npm run ios:dev-sync
-npm run ios:dev-open
-
-# Lancer depuis Xcode sur votre iPhone
-# ✨ L'app se recharge automatiquement à chaque modification !
+```
+KaliApp3/
+├── web/                    ← 🌐 Code Web (React + Vite)
+│   ├── src/               ← Composants React, pages, contexts
+│   ├── public/            ← Assets statiques
+│   ├── dist/              ← Build de production (généré)
+│   ├── package.json       ← Dépendances web
+│   ├── vite.config.ts     ← Configuration Vite
+│   └── ...
+│
+├── ios/                    ← 📱 Code iOS (Capacitor + Xcode)
+│   └── App/               ← Projet Xcode
+│
+├── scripts/                ← 🔧 Scripts utilitaires
+│   └── setup-dev-server.sh
+│
+├── package.json            ← Scripts globaux (racine)
+├── capacitor.config.ts     ← Configuration Capacitor (pointe vers web/dist)
+├── vercel.json             ← Configuration Vercel (build depuis web/)
+└── README.md               ← Ce fichier
 ```
 
-📖 **Guide complet :** [LIVE_RELOAD_GUIDE.md](./LIVE_RELOAD_GUIDE.md)
+## 🎯 Pourquoi Cette Structure ?
 
-### Option 2 : Build Production
+**Séparation claire des environnements:**
+- ✅ Tester sur **Vercel** sans toucher au code iOS
+- ✅ Tester sur **Xcode** sans toucher au code web
+- ✅ Développement indépendant de chaque plateforme
+- ✅ Évite les conflits entre web et mobile
 
-Pour tester la version finale ou déployer sur l'App Store :
+## 🚀 Commandes Principales
+
+### Développement Web (Vercel)
 
 ```bash
-# Build et synchronisation
-npm run ios:build
+# Lancer le serveur de développement
+npm run dev
 
-# Ouvrir dans Xcode
-npm run ios:open
+# Build pour production
+npm run build
 
-# Ou tout en une commande
+# Preview du build
+npm run preview
+```
+
+### Développement iOS (Xcode)
+
+```bash
+# Build web + sync iOS + ouvrir Xcode
 npm run ios:deploy
+
+# Sync uniquement (après modification)
+npm run ios:sync
+
+# Ouvrir Xcode
+npm run ios:open
 ```
 
-📖 **Guide de déploiement :** [iOS_DEPLOYMENT_GUIDE.md](./iOS_DEPLOYMENT_GUIDE.md)
+### Live Reload iOS (optionnel)
 
-## 📦 Scripts NPM Disponibles
-
-### Développement Web
 ```bash
-npm run dev          # Serveur de dev Vite (avec --host pour réseau local)
-npm run build        # Build de production
-npm run preview      # Preview du build
-npm run lint         # Linter ESLint
+# Configuration automatique
+npm run ios:dev
+# Puis suivre les instructions
 ```
 
-### iOS - Production
-```bash
-npm run ios:build    # Build webapp + sync avec iOS
-npm run ios:open     # Ouvrir le projet dans Xcode
-npm run ios:sync     # Synchroniser les changements avec iOS
-npm run ios:deploy   # Build + sync + ouvrir Xcode (workflow complet)
-```
+## 📖 Workflow Recommandé
 
-### iOS - Développement avec Live Reload
-```bash
-npm run ios:dev-setup   # Configuration du Live Reload (détecte votre IP locale)
-npm run ios:dev-sync    # Sync avec la config de dev
-npm run ios:dev-open    # Ouvrir dans Xcode
-npm run ios:dev         # Workflow complet de setup
-```
-
-### Supabase
-```bash
-npm run types:supabase  # Générer les types TypeScript depuis Supabase
-```
-
-## 🛠️ Installation
+### 1. Tester sur Web (Vercel)
 
 ```bash
-# Installer les dépendances
-npm install
-
-# Démarrer le serveur de développement web
+cd web
 npm run dev
+# Teste sur http://localhost:5173
 ```
 
-## 📱 Configuration iOS
-
-Le projet iOS est déjà configuré dans le dossier `ios/`. Pour l'utiliser :
-
-1. **Prérequis :**
-   - macOS avec Xcode installé
-   - CocoaPods : `sudo gem install cocoapods`
-
-2. **Installer les dépendances natives :**
-   ```bash
-   cd ios/App
-   pod install
-   ```
-
-3. **Ouvrir dans Xcode :**
-   ```bash
-   npm run ios:open
-   # Ou manuellement : open ios/App/App.xcworkspace
-   ```
-
-4. **Configuration Xcode :**
-   - Sélectionner votre équipe de développement (Signing & Capabilities)
-   - Choisir votre iPhone/Simulateur
-   - Cliquer sur Play ▶️
-
-## 🎨 Fonctionnalités
-
-- ✅ Création et gestion d'événements
-- ✅ Calendrier interactif
-- ✅ Profils utilisateurs et organisateurs
-- ✅ Feed d'activités
-- ✅ Recherche d'événements
-- ✅ Support multilingue
-- ✅ Authentification Supabase
-- ✅ Optimisations iOS (safe areas, status bar, etc.)
-
-## 📄 Optimisations iOS Implémentées
-
-- 🔄 Safe areas pour appareils avec encoche
-- 🎨 Support du mode sombre/clair automatique
-- 📱 Viewport optimisé pour iOS
-- ⚡ Smooth scrolling WebKit
-- 🔌 Plugins Capacitor (App, Haptics, Keyboard, Status Bar)
-- 🔐 Permissions configurées (Caméra, Photos, Location, Calendrier, etc.)
-
-## 📚 Documentation
-
-- [Guide de Déploiement iOS](./iOS_DEPLOYMENT_GUIDE.md) - Instructions complètes pour déployer sur l'App Store
-- [Guide Live Reload](./LIVE_RELOAD_GUIDE.md) - Développement iOS avec rechargement automatique
-
-## 🏗️ Structure du Projet
-
+Une fois satisfait:
+```bash
+npm run build
+git add .
+git commit -m "Update web app"
+git push
+# Vercel déploie automatiquement
 ```
-.
+
+### 2. Tester sur iOS (Xcode)
+
+```bash
+# Depuis la racine
+npm run ios:deploy
+# Xcode s'ouvre automatiquement
+# Build & Run dans le simulateur iOS
+```
+
+## 🌐 Déploiement Vercel
+
+**Configuration automatique:**
+- Build: `cd web && npm run build`
+- Output: `web/dist`
+- Framework: Vite
+
+**Variables d'environnement requises:**
+```
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
+```
+
+## 📱 Build iOS pour App Store
+
+1. Ouvrir Xcode: `npm run ios:open`
+2. Sélectionner "Any iOS Device"
+3. Product → Archive
+4. Distribute App → App Store Connect
+
+Voir `iOS_DEPLOYMENT_GUIDE.md` pour les détails complets.
+
+## 🔧 Scripts Disponibles
+
+### Scripts Racine (package.json)
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Lance le serveur web (port 5173) |
+| `npm run build` | Build web de production |
+| `npm run preview` | Preview du build web |
+| `npm run ios:deploy` | Build + Sync + Ouvrir Xcode |
+| `npm run ios:sync` | Sync web/dist vers iOS |
+| `npm run ios:open` | Ouvrir Xcode |
+
+### Scripts Web (web/package.json)
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Serveur dev avec HMR |
+| `npm run build` | Build production |
+| `npm run preview` | Preview du build |
+| `npm run lint` | Linter ESLint |
+
+## 🧪 Pages de Test
+
+Après le build, les pages suivantes sont disponibles:
+
+- `/` - Application principale
+- `/test.html` - Test HTML pur (Vercel OK)
+- `/diagnostic.html` - Diagnostic JavaScript
+- `/setup.html` - Instructions Supabase
+
+## 📦 Technologies
+
+**Web:**
+- React 18
+- TypeScript
+- Vite 6
+- TailwindCSS
+- Supabase
+- i18next (internationalisation)
+
+**iOS:**
+- Capacitor 7
+- Swift/Objective-C
+- Xcode
+
+## 🔄 Migration depuis l'Ancienne Structure
+
+**Avant:**
+```
+KaliApp3/
 ├── src/
-│   ├── components/      # Composants React réutilisables
-│   ├── contexts/        # Context providers (Auth, Event, Organizer)
-│   ├── pages/           # Pages de l'application
-│   ├── lib/             # Utilitaires et configuration
-│   ├── hooks/           # Custom hooks
-│   └── i18n/            # Fichiers de traduction
-├── ios/                 # Projet iOS Capacitor
-├── public/              # Assets statiques
-└── scripts/             # Scripts utilitaires (setup iOS, etc.)
+├── public/
+├── dist/
+└── ios/
 ```
 
-## 🔧 Configuration
-
-### Variables d'Environnement
-
-Créez un fichier `.env` à la racine :
-
-```env
-VITE_SUPABASE_URL=votre_url_supabase
-VITE_SUPABASE_ANON_KEY=votre_cle_supabase
+**Après:**
+```
+KaliApp3/
+├── web/              ← Tout le code web ici
+│   ├── src/
+│   ├── public/
+│   └── dist/
+└── ios/              ← Code iOS inchangé
 ```
 
-### Capacitor
+## ⚠️ Important
 
-La configuration Capacitor se trouve dans :
-- **Production :** `capacitor.config.ts`
-- **Développement (Live Reload) :** `capacitor.config.dev.local.ts` (auto-généré)
+- **Ne jamais modifier** `web/dist/` manuellement (généré automatiquement)
+- **Toujours build** avant de sync iOS: `npm run build && npm run ios:sync`
+- **Variables d'environnement** requises pour Supabase (voir `web/src/lib/supabase.ts`)
 
-## 🤝 Contribution
+## 📚 Documentation Complète
 
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
-## 📝 License
-
-Ce projet est sous licence MIT.
+- `iOS_DEPLOYMENT_GUIDE.md` - Guide déploiement App Store
+- `LIVE_RELOAD_GUIDE.md` - Développement avec Live Reload
+- `IPAD_TESTING_GUIDE.md` - Tests sur iPad sans Mac
+- `TESTING_GUIDE.md` - Guide diagnostic écran blanc
 
 ## 🆘 Support
 
-Pour toute question ou problème :
-- Consultez les guides dans ce repository
-- Ouvrez une issue sur GitHub
-- Documentation Capacitor : https://capacitorjs.com/docs
+En cas de problème:
 
----
+1. **Web ne build pas:** `cd web && rm -rf node_modules && npm install`
+2. **iOS ne sync pas:** Vérifier `capacitor.config.ts` → `webDir: 'web/dist'`
+3. **Écran blanc:** Voir `TESTING_GUIDE.md`
+4. **Erreurs TypeScript:** Non-bloquantes, Vite build quand même
 
-Développé avec ❤️ et [Claude Code](https://claude.com/claude-code)
+## 📄 Licence
+
+Propriétaire - Tous droits réservés
